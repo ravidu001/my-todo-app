@@ -19,6 +19,9 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Backend connected!" });
 });
 
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
