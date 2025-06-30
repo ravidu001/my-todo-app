@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
 import TodoFilters from './TodoFilters';
+import TodoForm from './TodoForm';
+import TodoItem from './TodoItem';
 import { useAuth } from '../contexts/AuthContext';
 import { useTodos } from '../contexts/TodoContext';
-
-// Temporarily comment out the other imports
-// import TodoForm from './TodoForm';
-// import TodoItem from './TodoItem';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -218,38 +216,11 @@ const Dashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {todos.map((todo) => (
-                    <div key={todo._id} className="border rounded p-3 bg-gray-50">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className={`font-medium ${todo.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                            {todo.title}
-                          </h4>
-                          {todo.description && (
-                            <p className="text-sm text-gray-600 mt-1">{todo.description}</p>
-                          )}
-                          <div className="flex items-center mt-2 space-x-2">
-                            <span className={`px-2 py-1 text-xs rounded-full ${
-                              todo.priority === 'high' ? 'bg-red-100 text-red-800' :
-                              todo.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
-                            }`}>
-                              {todo.priority}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              {todo.status}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleEditTodo(todo)}
-                            className="text-indigo-600 hover:text-indigo-900 text-sm"
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <TodoItem
+                      key={todo._id}
+                      todo={todo}
+                      onEdit={handleEditTodo}
+                    />
                   ))}
                 </div>
               )}
@@ -274,15 +245,10 @@ const Dashboard = () => {
                   </svg>
                 </button>
               </div>
-              <div className="p-4 bg-gray-100 rounded">
-                <p>TodoForm temporarily disabled for testing</p>
-                <button
-                  onClick={handleCloseTodoForm}
-                  className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
-                >
-                  Close
-                </button>
-              </div>
+              <TodoForm
+                onClose={handleCloseTodoForm}
+                editTodo={editingTodo}
+              />
             </div>
           </div>
         )}

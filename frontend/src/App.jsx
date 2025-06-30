@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import SimpleDashboard from './components/SimpleDashboard';
 import { TodoProvider } from './contexts/TodoContext';
 
 // Loading component
