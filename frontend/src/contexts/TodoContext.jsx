@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import axiosInstance from '../utils/axiosConfig';
 import { useAuth } from './AuthContext';
@@ -36,26 +36,8 @@ export const TodoProvider = ({ children }) => {
     sortOrder: 'desc'
   });
 
-  // Load todos when authenticated or filters change
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchTodos();
-      fetchStats();
-    } else {
-      // Clear todos when not authenticated
-      setTodos([]);
-      setStats({ total: 0, active: 0, completed: 0, overdue: 0, dueToday: 0 });
-    }
-  }, [isAuthenticated]); // Remove the function dependencies temporarily
-
-  // Refetch todos when filters change
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchTodos();
-    }
-  }, [filters, isAuthenticated]);
-
-  const fetchTodos = async () => {
+  // Define functions first
+  const fetchTodos = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -82,16 +64,28 @@ export const TodoProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await axiosInstance.get('/todos/stats');
       setStats(response.data.data);
     } catch (error) {
       console.error('Fetch stats error:', error);
     }
-  };
+  }, []);
+
+  // Load todos when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchTodos();
+      fetchStats();
+    } else {
+      // Clear todos when not authenticated
+      setTodos([]);
+      setStats({ total: 0, active: 0, completed: 0, overdue: 0, dueToday: 0 });
+    }
+  }, [isAuthenticated, fetchTodos, fetchStats]);
 
   const createTodo = async (todoData) => {
     try {
@@ -188,13 +182,13 @@ export const TodoProvider = ({ children }) => {
     }
   };
 
-  const updateFilters = (newFilters) => {
+  const updateFilters = useCallback((newFilters) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
-  };
+  }, []);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError('');
-  };
+  }, []);
 
   // Memoize filtered todos to prevent infinite re-renders
   const filteredTodos = useMemo(() => {
