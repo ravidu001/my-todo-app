@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import SimpleDashboard from './components/SimpleDashboard';
+import { TodoProvider } from './contexts/TodoContext';
 
 // Loading component
 const LoadingSpinner = () => (
@@ -28,7 +30,11 @@ const AppContent = () => {
   }
 
   if (isAuthenticated) {
-    return <Dashboard />;
+    return (
+      <TodoProvider>
+        <Dashboard />
+      </TodoProvider>
+    );
   }
 
   return (
@@ -42,14 +48,51 @@ const AppContent = () => {
   );
 };
 
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-red-50 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Something went wrong!</h1>
+            <p className="text-red-500 mb-4">{this.state.error?.message}</p>
+            <button 
+              onClick={() => this.setState({ hasError: false, error: null })}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 // Main App Component
 function App() {
   return (
-    <AuthProvider>
-      <div className="App">
+    <ErrorBoundary>
+      <AuthProvider>
         <AppContent />
-      </div>
-    </AuthProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

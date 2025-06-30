@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import TodoFilters from './TodoFilters';
 import { useAuth } from '../contexts/AuthContext';
+import { useTodos } from '../contexts/TodoContext';
+
+// Temporarily comment out the other imports
+// import TodoForm from './TodoForm';
+// import TodoItem from './TodoItem';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const { todos, stats, loading, error, clearError } = useTodos();
+  const [showTodoForm, setShowTodoForm] = useState(false);
+  const [editingTodo, setEditingTodo] = useState(null);
+
+  const handleEditTodo = (todo) => {
+    setEditingTodo(todo);
+    setShowTodoForm(true);
+  };
+
+  const handleCloseTodoForm = () => {
+    setShowTodoForm(false);
+    setEditingTodo(null);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -17,6 +37,16 @@ const Dashboard = () => {
             </div>
             
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setShowTodoForm(true)}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              >
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add Todo
+              </button>
+              
               <div className="flex items-center space-x-3">
                 <div className="flex items-center justify-center w-8 h-8 bg-indigo-100 rounded-full">
                   <span className="text-sm font-medium text-indigo-600">
@@ -54,8 +84,25 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-red-600">{error}</p>
+              <button
+                onClick={clearError}
+                className="text-red-400 hover:text-red-500"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
@@ -72,7 +119,7 @@ const Dashboard = () => {
                       Total Tasks
                     </dt>
                     <dd className="text-lg font-medium text-gray-900">
-                      0
+                      {stats.total}
                     </dd>
                   </dl>
                 </div>
@@ -96,7 +143,7 @@ const Dashboard = () => {
                       Completed
                     </dt>
                     <dd className="text-lg font-medium text-gray-900">
-                      0
+                      {stats.completed}
                     </dd>
                   </dl>
                 </div>
@@ -108,7 +155,7 @@ const Dashboard = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center">
+                  <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -117,10 +164,10 @@ const Dashboard = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      Overdue
+                      Active
                     </dt>
                     <dd className="text-lg font-medium text-gray-900">
-                      0
+                      {stats.active}
                     </dd>
                   </dl>
                 </div>
@@ -129,35 +176,116 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Todo Section - Placeholder */}
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Your Tasks
-            </h3>
-            
-            <div className="text-center py-12">
-              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-              </svg>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No tasks yet</h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Get started by creating your first task.
-              </p>
-              <div className="mt-6">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        {/* Todo Section */}
+        <div className="space-y-6">
+          {/* Filters */}
+          <TodoFilters />
+
+          {/* Todo List */}
+          <div className="bg-white shadow rounded-lg">
+            <div className="px-4 py-5 sm:p-6">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                Your Tasks {todos.length > 0 && `(${todos.length})`}
+              </h3>
+              
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                  <p className="mt-2 text-sm text-gray-500">Loading tasks...</p>
+                </div>
+              ) : todos.length === 0 ? (
+                <div className="text-center py-12">
+                  <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
-                  Add Task
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">No tasks yet</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Get started by creating your first task.
+                  </p>
+                  <div className="mt-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowTodoForm(true)}
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      Add Task
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {todos.map((todo) => (
+                    <div key={todo._id} className="border rounded p-3 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className={`font-medium ${todo.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+                            {todo.title}
+                          </h4>
+                          {todo.description && (
+                            <p className="text-sm text-gray-600 mt-1">{todo.description}</p>
+                          )}
+                          <div className="flex items-center mt-2 space-x-2">
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              todo.priority === 'high' ? 'bg-red-100 text-red-800' :
+                              todo.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {todo.priority}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {todo.status}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEditTodo(todo)}
+                            className="text-indigo-600 hover:text-indigo-900 text-sm"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Todo Form Modal - Temporarily disabled */}
+        {showTodoForm && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {editingTodo ? 'Edit Task' : 'Create New Task'}
+                </h3>
+                <button
+                  onClick={handleCloseTodoForm}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-4 bg-gray-100 rounded">
+                <p>TodoForm temporarily disabled for testing</p>
+                <button
+                  onClick={handleCloseTodoForm}
+                  className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
+                >
+                  Close
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );
