@@ -24,28 +24,28 @@ const TodoItem = ({ todo, onEdit }) => {
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return 'border-l-red-500 bg-red-50';
-      case 'medium': return 'border-l-yellow-500 bg-yellow-50';
-      case 'low': return 'border-l-green-500 bg-green-50';
-      default: return 'border-l-gray-500 bg-gray-50';
+      case 'high': return 'border-l-error-500 bg-error-50';
+      case 'medium': return 'border-l-warning-500 bg-warning-50';
+      case 'low': return 'border-l-success-500 bg-success-50';
+      default: return 'border-l-secondary-500 bg-secondary-50';
     }
   };
 
   const getPriorityBadge = (priority) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'high': return 'bg-error-100 text-error-800 border-error-200';
+      case 'medium': return 'bg-warning-100 text-warning-800 border-warning-200';
+      case 'low': return 'bg-success-100 text-success-800 border-success-200';
+      default: return 'bg-secondary-100 text-secondary-800 border-secondary-200';
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'overdue': return 'bg-red-100 text-red-800 border-red-200';
-      case 'active': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'completed': return 'bg-success-100 text-success-800 border-success-200';
+      case 'overdue': return 'bg-error-100 text-error-800 border-error-200';
+      case 'active': return 'bg-info-100 text-info-800 border-info-200';
+      default: return 'bg-secondary-100 text-secondary-800 border-secondary-200';
     }
   };
 
@@ -70,7 +70,7 @@ const TodoItem = ({ todo, onEdit }) => {
 
   return (
     <>
-      <div className={`bg-white border-l-4 rounded-r-lg shadow-sm hover:shadow-md transition-shadow ${getPriorityColor(todo.priority)} ${
+      <div className={`bg-white border-l-4 rounded-r-lg shadow-soft hover:shadow-soft-lg transition-shadow ${getPriorityColor(todo.priority)} ${
         todo.status === 'completed' ? 'opacity-75' : ''
       }`}>
         <div className="p-4">
@@ -83,8 +83,8 @@ const TodoItem = ({ todo, onEdit }) => {
                 disabled={actionLoading === 'toggle'}
                 className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                   todo.status === 'completed'
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'border-gray-300 hover:border-green-500'
+                    ? 'bg-success-500 border-success-500 text-white'
+                    : 'border-secondary-300 hover:border-success-500'
                 } ${actionLoading === 'toggle' ? 'opacity-50' : ''}`}
               >
                 {actionLoading === 'toggle' ? (
@@ -102,13 +102,13 @@ const TodoItem = ({ todo, onEdit }) => {
               {/* Todo Content */}
               <div className="flex-1 min-w-0">
                 <h3 className={`text-sm font-medium ${
-                  todo.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'
+                  todo.status === 'completed' ? 'line-through text-secondary-500' : 'text-secondary-900'
                 }`}>
                   {todo.title}
                 </h3>
                 {todo.description && (
                   <p className={`mt-1 text-sm ${
-                    todo.status === 'completed' ? 'line-through text-gray-400' : 'text-gray-600'
+                    todo.status === 'completed' ? 'line-through text-secondary-400' : 'text-secondary-600'
                   }`}>
                     {todo.description}
                   </p>
@@ -120,7 +120,7 @@ const TodoItem = ({ todo, onEdit }) => {
             <div className="flex items-center space-x-2 ml-4">
               <button
                 onClick={() => onEdit(todo)}
-                className="text-gray-400 hover:text-indigo-600 transition-colors"
+                className="text-secondary-400 hover:text-primary-600 transition-colors"
                 title="Edit todo"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,7 +129,7 @@ const TodoItem = ({ todo, onEdit }) => {
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="text-gray-400 hover:text-red-600 transition-colors"
+                className="text-secondary-400 hover:text-error-600 transition-colors"
                 title="Delete todo"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,13 +164,13 @@ const TodoItem = ({ todo, onEdit }) => {
                   {todo.tags.slice(0, 2).map((tag, index) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 border border-primary-200"
                     >
                       #{tag}
                     </span>
                   ))}
                   {todo.tags.length > 2 && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-secondary-500">
                       +{todo.tags.length - 2} more
                     </span>
                   )}
@@ -181,7 +181,7 @@ const TodoItem = ({ todo, onEdit }) => {
             {/* Due Date */}
             {todo.dueDate && (
               <div className={`text-xs ${
-                isOverdue ? 'text-red-600 font-medium' : 'text-gray-500'
+                isOverdue ? 'text-error-600 font-medium' : 'text-secondary-500'
               }`}>
                 {isOverdue && '⚠️ '}
                 Due: {formatDate(todo.dueDate)}
@@ -191,7 +191,7 @@ const TodoItem = ({ todo, onEdit }) => {
 
           {/* Completed timestamp */}
           {todo.completedAt && (
-            <div className="mt-2 text-xs text-gray-500">
+            <div className="mt-2 text-xs text-secondary-500">
               Completed on {new Date(todo.completedAt).toLocaleString()}
             </div>
           )}
@@ -201,37 +201,37 @@ const TodoItem = ({ todo, onEdit }) => {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full">
+          <div className="bg-white rounded-lg shadow-soft-lg max-w-sm w-full">
             <div className="p-6">
               <div className="flex items-center mb-4">
-                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-error-100">
+                  <svg className="h-6 w-6 text-error-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </div>
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <h3 className="text-lg font-medium text-secondary-900 mb-2">
                   Delete Todo
                 </h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-sm text-secondary-500 mb-4">
                   Are you sure you want to delete "{todo.title}"? This action cannot be undone.
                 </p>
               </div>
               <div className="flex space-x-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-secondary-700 bg-secondary-100 border border-secondary-300 rounded-md hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={actionLoading === 'delete'}
-                  className={`flex-1 px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors ${
+                  className={`flex-1 px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-500 transition-colors ${
                     actionLoading === 'delete'
-                      ? 'bg-red-400 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700'
+                      ? 'bg-error-400 cursor-not-allowed'
+                      : 'bg-error-600 hover:bg-error-700'
                   }`}
                 >
                   {actionLoading === 'delete' ? (

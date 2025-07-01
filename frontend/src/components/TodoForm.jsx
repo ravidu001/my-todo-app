@@ -81,24 +81,24 @@ const TodoForm = ({ onClose, editTodo = null }) => {
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'high': return 'text-error-600 bg-error-50 border-error-200';
+      case 'medium': return 'text-warning-600 bg-warning-50 border-warning-200';
+      case 'low': return 'text-success-600 bg-success-50 border-success-200';
+      default: return 'text-secondary-600 bg-secondary-50 border-secondary-200';
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="px-6 py-4 border-b">
+      <div className="bg-white rounded-lg shadow-soft-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="px-6 py-4 border-b border-secondary-200">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-secondary-900">
               {isEditing ? 'Edit Todo' : 'Create New Todo'}
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500 transition-colors"
+              className="text-secondary-400 hover:text-secondary-500 transition-colors"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
