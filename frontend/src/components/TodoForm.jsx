@@ -89,29 +89,11 @@ const TodoForm = ({ onClose, editTodo = null }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-soft-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="px-6 py-4 border-b border-secondary-200">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-secondary-900">
-              {isEditing ? 'Edit Todo' : 'Create New Todo'}
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-secondary-400 hover:text-secondary-500 transition-colors"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-              Title <span className="text-red-500">*</span>
+            <label htmlFor="title" className="block text-sm font-medium text-secondary-700 mb-1">
+              Title <span className="text-error-500">*</span>
             </label>
             <input
               type="text"
@@ -119,23 +101,23 @@ const TodoForm = ({ onClose, editTodo = null }) => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                formErrors.title ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors ${
+                formErrors.title ? 'border-error-300' : 'border-secondary-300'
               }`}
               placeholder="Enter todo title"
               maxLength={100}
             />
             {formErrors.title && (
-              <p className="mt-1 text-sm text-red-600">{formErrors.title}</p>
+              <p className="mt-1 text-sm text-error-600">{formErrors.title}</p>
             )}
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-secondary-500">
               {formData.title.length}/100 characters
             </p>
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="description" className="block text-sm font-medium text-secondary-700 mb-1">
               Description
             </label>
             <textarea
@@ -144,23 +126,23 @@ const TodoForm = ({ onClose, editTodo = null }) => {
               value={formData.description}
               onChange={handleChange}
               rows={3}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                formErrors.description ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors ${
+                formErrors.description ? 'border-error-300' : 'border-secondary-300'
               }`}
               placeholder="Enter todo description (optional)"
               maxLength={500}
             />
             {formErrors.description && (
-              <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>
+              <p className="mt-1 text-sm text-error-600">{formErrors.description}</p>
             )}
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-secondary-500">
               {formData.description.length}/500 characters
             </p>
           </div>
 
           {/* Priority */}
           <div>
-            <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="priority" className="block text-sm font-medium text-secondary-700 mb-1">
               Priority
             </label>
             <select
@@ -168,7 +150,7 @@ const TodoForm = ({ onClose, editTodo = null }) => {
               name="priority"
               value={formData.priority}
               onChange={handleChange}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${getPriorityColor(formData.priority)}`}
+              className={`w-full px-3 py-2 border border-secondary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors ${getPriorityColor(formData.priority)}`}
             >
               <option value="low">🟢 Low Priority</option>
               <option value="medium">🟡 Medium Priority</option>
@@ -178,7 +160,7 @@ const TodoForm = ({ onClose, editTodo = null }) => {
 
           {/* Due Date */}
           <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="dueDate" className="block text-sm font-medium text-secondary-700 mb-1">
               Due Date
             </label>
             <input
@@ -187,18 +169,18 @@ const TodoForm = ({ onClose, editTodo = null }) => {
               name="dueDate"
               value={formData.dueDate}
               onChange={handleChange}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
-                formErrors.dueDate ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors ${
+                formErrors.dueDate ? 'border-error-300' : 'border-secondary-300'
               }`}
             />
             {formErrors.dueDate && (
-              <p className="mt-1 text-sm text-red-600">{formErrors.dueDate}</p>
+              <p className="mt-1 text-sm text-error-600">{formErrors.dueDate}</p>
             )}
           </div>
 
           {/* Tags */}
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="tags" className="block text-sm font-medium text-secondary-700 mb-1">
               Tags
             </label>
             <input
@@ -207,30 +189,30 @@ const TodoForm = ({ onClose, editTodo = null }) => {
               name="tags"
               value={formData.tags}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full px-3 py-2 border border-secondary-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               placeholder="Enter tags separated by commas"
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-secondary-500">
               Separate multiple tags with commas (e.g., work, urgent, project)
             </p>
           </div>
 
           {/* Form Actions */}
-          <div className="flex justify-end space-x-3 pt-4 border-t">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-secondary-200">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-secondary-700 bg-secondary-100 border border-secondary-300 rounded-md hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className={`px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors ${
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors ${
                 loading
-                  ? 'bg-indigo-400 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700'
+                  ? 'bg-primary-400 cursor-not-allowed'
+                  : 'bg-primary-600 hover:bg-primary-700'
               }`}
             >
               {loading ? (
@@ -247,8 +229,6 @@ const TodoForm = ({ onClose, editTodo = null }) => {
             </button>
           </div>
         </form>
-      </div>
-    </div>
   );
 };
 
