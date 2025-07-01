@@ -65,10 +65,23 @@ const Dashboard = () => {
               </button>
               
               <div className="flex items-center space-x-3">
+                
+                
+                {/* User Avatar */}
                 <div className="flex items-center justify-center w-8 h-8 bg-primary-100 rounded-full">
                   <span className="text-sm font-medium text-primary-600">
                     {user?.username?.charAt(0)?.toUpperCase()}
                   </span>
+                </div>
+
+                {/* User Info */}
+                <div className="hidden sm:block text-left">
+                  <div className="text-sm font-medium text-secondary-900">
+                    {user?.username}
+                  </div>
+                  <div className="text-xs text-secondary-500">
+                    {user?.email}
+                  </div>
                 </div>
                 
                 <button
