@@ -67,20 +67,24 @@ const Dashboard = () => {
               <div className="flex items-center space-x-3">
                 <div className="flex items-center justify-center w-8 h-8 bg-primary-100 rounded-full">
                   <span className="text-sm font-medium text-primary-600">
-                    {user?.username?.charAt(0)?.toUpperCase()}
+                    {user?.username?.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                
-                <button
-                  onClick={logout}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
-                >
-                  <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                  Logout
-                </button>
+                <div className="hidden md:block"></div>
+                  <p className="text-sm font-medium text-secondary-700">{user?.username}</p>
+                  <p className="text-xs text-secondary-500">{user?.email}</p>
+                </div>
               </div>
+              
+              <button
+                onClick={logout}
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+              >
+                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
             </div>
           </div>
         </div>
@@ -116,9 +120,9 @@ const Dashboard = () => {
               <p className="text-sm text-error-600">{error}</p>
               <button
                 onClick={clearError}
-                className="text-error-500 hover:text-error-700"
+                className="text-error-400 hover:text-error-500"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -132,14 +136,20 @@ const Dashboard = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
+                  <div className="w-8 h-8 bg-primary-500 rounded-md flex items-center justify-center"></div>
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-secondary-500 truncate">Total Tasks</dt>
-                    <dd className="text-lg font-medium text-secondary-900">{stats.total}</dd>
+                    <dt className="text-sm font-medium text-secondary-500 truncate">
+                      Total Tasks
+                    </dt>
+                    <dd className="text-lg font-medium text-secondary-900">
+                      {stats.total}
+                    </dd>
                   </dl>
                 </div>
               </div>
@@ -150,14 +160,20 @@ const Dashboard = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-success-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <div className="w-8 h-8 bg-success-500 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-secondary-500 truncate">Completed</dt>
-                    <dd className="text-lg font-medium text-secondary-900">{stats.completed}</dd>
+                    <dt className="text-sm font-medium text-secondary-500 truncate">
+                      Completed
+                    </dt>
+                    <dd className="text-lg font-medium text-secondary-900">
+                      {stats.completed}
+                    </dd>
                   </dl>
                 </div>
               </div>
@@ -168,32 +184,20 @@ const Dashboard = () => {
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-warning-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <div className="w-8 h-8 bg-warning-500 rounded-md flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-secondary-500 truncate">Active</dt>
-                    <dd className="text-lg font-medium text-secondary-900">{stats.active}</dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white overflow-hidden shadow-soft rounded-lg">
-            <div className="p-5">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-error-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-secondary-500 truncate">Overdue</dt>
-                    <dd className="text-lg font-medium text-secondary-900">{stats.overdue}</dd>
+                    <dt className="text-sm font-medium text-secondary-500 truncate">
+                      Active
+                    </dt>
+                    <dd className="text-lg font-medium text-secondary-900">
+                      {stats.active}
+                    </dd>
                   </dl>
                 </div>
               </div>
@@ -201,7 +205,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Todo List Section */}
+        {/* Todo Section */}
         <div className="space-y-6">
           {/* Filters */}
           <TodoFilters />
@@ -210,44 +214,42 @@ const Dashboard = () => {
           <div className="bg-white shadow-soft rounded-lg">
             <div className="px-4 py-5 sm:p-6">
               <h3 className="text-lg leading-6 font-medium text-secondary-900 mb-4">
-                Your Tasks
+                Your Tasks {todos.length > 0 && `(${todos.length})`}
               </h3>
               
               {loading ? (
-                <div className="flex justify-center py-8">
-                  <div className="flex items-center">
-                    <svg className="animate-spin h-5 w-5 text-primary-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span className="text-secondary-600">Loading your tasks...</span>
-                  </div>
+                <div className="text-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                  <p className="mt-2 text-sm text-secondary-500">Loading tasks...</p>
                 </div>
               ) : todos.length === 0 ? (
                 <div className="text-center py-12">
                   <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
                   <h3 className="mt-2 text-sm font-medium text-secondary-900">No tasks yet</h3>
-                  <p className="mt-1 text-sm text-secondary-500">Get started by creating your first task.</p>
+                  <p className="mt-1 text-sm text-secondary-500">
+                    Get started by creating your first task.
+                  </p>
                   <div className="mt-6">
                     <button
+                      type="button"
                       onClick={() => setShowTodoForm(true)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-soft text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                     >
                       <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
-                      Add Your First Task
+                      Add Task
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {todos.map((todo) => (
-                    <TodoItem 
-                      key={todo._id} 
-                      todo={todo} 
+                    <TodoItem
+                      key={todo._id}
+                      todo={todo}
                       onEdit={handleEditTodo}
                     />
                   ))}
@@ -257,7 +259,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Todo Form Modal */}
+        {/* Todo Form Modal - Temporarily disabled */}
         {showTodoForm && (
           <div className="fixed inset-0 bg-secondary-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-soft-lg rounded-md bg-white">

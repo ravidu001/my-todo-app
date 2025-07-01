@@ -174,8 +174,8 @@ const Dashboard = () => {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-secondary-500 truncate">Active</dt>
-                    <dd className="text-lg font-medium text-secondary-900">{stats.active}</dd>
+                    <dt className="text-sm font-medium text-secondary-500 truncate">Pending</dt>
+                    <dd className="text-lg font-medium text-secondary-900">{stats.pending}</dd>
                   </dl>
                 </div>
               </div>
@@ -199,6 +199,19 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Quick Action Button */}
+        <div className="mb-8">
+          <button
+            onClick={() => setShowTodoForm(true)}
+            className="w-full md:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors shadow-soft"
+          >
+            <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Create New Task
+          </button>
         </div>
 
         {/* Todo List Section */}
