@@ -79,8 +79,10 @@ const TodoItem = ({ todo, onEdit }) => {
 
   return (
     <>
-      <div className={`bg-white border-l-4 rounded-r-lg shadow-soft hover:shadow-soft-lg transition-shadow ${getPriorityColor(todo.priority)} ${
-        todo.status === 'completed' ? 'opacity-75' : ''
+      <div className={`bg-white border-l-4 rounded-r-lg shadow-soft hover:shadow-soft-lg transition-all duration-200 ${getPriorityColor(todo.priority)} ${
+        todo.status === 'completed' 
+          ? 'opacity-80 bg-success-50 border-l-success-400' 
+          : ''
       }`}>
         <div className="p-4">
           {/* Header */}
@@ -90,10 +92,10 @@ const TodoItem = ({ todo, onEdit }) => {
               <button
                 onClick={handleToggle}
                 disabled={actionLoading === 'toggle'}
-                className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
                   todo.status === 'completed'
-                    ? 'bg-success-500 border-success-500 text-white'
-                    : 'border-secondary-300 hover:border-success-500'
+                    ? 'bg-success-500 border-success-500 text-white shadow-sm'
+                    : 'border-secondary-300 hover:border-success-500 hover:bg-success-50'
                 } ${actionLoading === 'toggle' ? 'opacity-50' : ''}`}
               >
                 {actionLoading === 'toggle' ? (
@@ -110,18 +112,31 @@ const TodoItem = ({ todo, onEdit }) => {
 
               {/* Todo Content */}
               <div className="flex-1 min-w-0">
-                <h3 className={`text-sm font-medium ${
-                  todo.status === 'completed' ? 'line-through text-secondary-500' : 'text-secondary-900'
-                }`}>
-                  {todo.title}
-                </h3>
-                {todo.description && (
-                  <p className={`mt-1 text-sm ${
-                    todo.status === 'completed' ? 'line-through text-secondary-400' : 'text-secondary-600'
-                  }`}>
-                    {todo.description}
-                  </p>
-                )}
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className={`text-sm font-medium transition-colors duration-200 ${
+                      todo.status === 'completed' ? 'text-success-700' : 'text-secondary-900'
+                    }`}>
+                      {todo.title}
+                    </h3>
+                    {todo.description && (
+                      <p className={`mt-1 text-sm transition-colors duration-200 ${
+                        todo.status === 'completed' ? 'text-success-600' : 'text-secondary-600'
+                      }`}>
+                        {todo.description}
+                      </p>
+                    )}
+                  </div>
+                  
+                  {/* Completion Badge */}
+                  {todo.status === 'completed' && (
+                    <div className="ml-3 flex items-center">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-success-100 text-success-800 border border-success-200">
+                        ✓ Done
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -159,13 +174,14 @@ const TodoItem = ({ todo, onEdit }) => {
                 {todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}
               </span>
 
-              {/* Status Badge */}
-              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(todo.status)}`}>
-                {todo.status === 'completed' && '✓'}
-                {todo.status === 'overdue' && '⚠️'}
-                {todo.status === 'active' && '○'}
-                {todo.status.charAt(0).toUpperCase() + todo.status.slice(1)}
-              </span>
+              {/* Status Badge - Only show for non-completed tasks */}
+              {todo.status !== 'completed' && (
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(todo.status)}`}>
+                  {todo.status === 'overdue' && '⚠️'}
+                  {todo.status === 'active' && '○'}
+                  {todo.status.charAt(0).toUpperCase() + todo.status.slice(1)}
+                </span>
+              )}
 
               {/* Completed After Overdue Indicator */}
               {todo.status === 'completed' && todo.completedAfterOverdue && (
@@ -207,10 +223,19 @@ const TodoItem = ({ todo, onEdit }) => {
 
           {/* Completed timestamp */}
           {todo.completedAt && (
-            <div className={`mt-2 text-xs ${todo.completedAfterOverdue ? 'text-warning-600 font-medium' : 'text-secondary-500'}`}>
+            <div className={`mt-3 pt-2 border-t border-success-200 text-xs flex items-center ${
+              todo.completedAfterOverdue ? 'text-warning-600' : 'text-success-600'
+            }`}>
+              <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
               {todo.completedAfterOverdue ? '⚠️ ' : ''}
-              Completed on {new Date(todo.completedAt).toLocaleString()}
-              {todo.completedAfterOverdue && ' (after due date)'}
+              Completed {new Date(todo.completedAt).toLocaleDateString()} at {new Date(todo.completedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+              {todo.completedAfterOverdue && (
+                <span className="ml-1 px-1 py-0.5 bg-warning-100 text-warning-700 rounded text-xs">
+                  Late
+                </span>
+              )}
             </div>
           )}
         </div>

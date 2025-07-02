@@ -27,7 +27,7 @@ const getFormattedDate = () => {
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
-  const { todos, stats, loading, error, clearError } = useTodos();
+  const { todos, stats, loading, error, clearError, filters } = useTodos();
   const [showTodoForm, setShowTodoForm] = useState(false);
   const [editingTodo, setEditingTodo] = useState(null);
 
@@ -39,6 +39,85 @@ const Dashboard = () => {
   const handleCloseTodoForm = () => {
     setShowTodoForm(false);
     setEditingTodo(null);
+  };
+
+  // Helper function to get dynamic empty state content based on current filter
+  const getEmptyStateContent = () => {
+    // Handle search results first
+    if (filters.search) {
+      return {
+        icon: (
+          <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        ),
+        title: `No tasks found for "${filters.search}"`,
+        description: "Try adjusting your search terms or create a new task.",
+        showButton: true
+      };
+    }
+
+    // Handle priority filters
+    if (filters.priority !== 'all') {
+      return {
+        icon: (
+          <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2C7 1.44772 7.44772 1 8 1H16C16.5523 1 17 1.44772 17 2V4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H19V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V6H4C3.44772 6 3 5.55228 3 5C3 4.44772 3.44772 4 4 4H7Z" />
+          </svg>
+        ),
+        title: `No ${filters.priority} priority tasks`,
+        description: `You don't have any ${filters.priority} priority tasks right now.`,
+        showButton: false
+      };
+    }
+
+    // Handle status filters
+    switch (filters.status) {
+      case 'overdue':
+        return {
+          icon: (
+            <svg className="mx-auto h-12 w-12 text-success-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ),
+          title: "No overdue tasks! 🎉",
+          description: "Excellent! You're on top of your schedule. All your tasks are up to date.",
+          showButton: false
+        };
+      case 'completed':
+        return {
+          icon: (
+            <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ),
+          title: "No completed tasks yet",
+          description: "Complete some tasks to see them here. You've got this!",
+          showButton: false
+        };
+      case 'active':
+        return {
+          icon: (
+            <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ),
+          title: "No active tasks",
+          description: "All caught up! Create a new task to get started.",
+          showButton: true
+        };
+      default: // 'all' or any other filter
+        return {
+          icon: (
+            <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          ),
+          title: "No tasks yet",
+          description: "Get started by creating your first task.",
+          showButton: true
+        };
+    }
   };
 
   return (
@@ -239,22 +318,29 @@ const Dashboard = () => {
                 </div>
               ) : todos.length === 0 ? (
                 <div className="text-center py-12">
-                  <svg className="mx-auto h-12 w-12 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <h3 className="mt-2 text-sm font-medium text-secondary-900">No tasks yet</h3>
-                  <p className="mt-1 text-sm text-secondary-500">Get started by creating your first task.</p>
-                  <div className="mt-6">
-                    <button
-                      onClick={() => setShowTodoForm(true)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                    >
-                      <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      Add Your First Task
-                    </button>
-                  </div>
+                  {(() => {
+                    const emptyState = getEmptyStateContent();
+                    return (
+                      <>
+                        {emptyState.icon}
+                        <h3 className="mt-2 text-sm font-medium text-secondary-900">{emptyState.title}</h3>
+                        <p className="mt-1 text-sm text-secondary-500">{emptyState.description}</p>
+                        {emptyState.showButton && (
+                          <div className="mt-6">
+                            <button
+                              onClick={() => setShowTodoForm(true)}
+                              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                            >
+                              <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                              </svg>
+                              Add Your First Task
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
               ) : (
                 <div className="space-y-4">

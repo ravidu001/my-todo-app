@@ -321,7 +321,8 @@ const toggleTodo = async (req, res) => {
     console.error('Toggle todo error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error toggling todo status'
+      message: 'Error toggling todo status',
+      error: error.message
     });
   }
 };

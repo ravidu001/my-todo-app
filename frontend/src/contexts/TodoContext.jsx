@@ -163,15 +163,23 @@ export const TodoProvider = ({ children }) => {
       const response = await axiosInstance.patch(`/todos/${todoId}/toggle`);
       const updatedTodo = response.data.data;
       
-      // Update todo in state
+      // Update todo in state immediately for responsive UI
       setTodos(prevTodos => 
         prevTodos.map(todo => 
           todo._id === todoId ? updatedTodo : todo
         )
       );
       
-      // Update stats
+      // Update stats immediately
       fetchStats();
+      
+      // If we're filtering by status, refetch to ensure correct list
+      if (filters.status !== 'all') {
+        // Small delay to ensure backend has processed the change
+        setTimeout(() => {
+          fetchTodos();
+        }, 100);
+      }
       
       return { success: true, data: updatedTodo };
     } catch (error) {
@@ -196,10 +204,37 @@ export const TodoProvider = ({ children }) => {
   // Memoize filtered todos to prevent infinite re-renders
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
-      // Additional client-side filtering can be added here
+      // Filter by status
+      if (filters.status !== 'all') {
+        // For overdue status, check if todo is actually overdue
+        if (filters.status === 'overdue') {
+          const isOverdue = todo.dueDate && new Date(todo.dueDate) < new Date() && todo.status !== 'completed';
+          if (!isOverdue) return false;
+        } else if (todo.status !== filters.status) {
+          return false;
+        }
+      }
+      
+      // Filter by priority
+      if (filters.priority !== 'all' && todo.priority !== filters.priority) {
+        return false;
+      }
+      
+      // Filter by search term
+      if (filters.search) {
+        const searchTerm = filters.search.toLowerCase();
+        const titleMatch = todo.title.toLowerCase().includes(searchTerm);
+        const descriptionMatch = todo.description?.toLowerCase().includes(searchTerm);
+        const tagMatch = todo.tags?.some(tag => tag.toLowerCase().includes(searchTerm));
+        
+        if (!titleMatch && !descriptionMatch && !tagMatch) {
+          return false;
+        }
+      }
+      
       return true;
     });
-  }, [todos]);
+  }, [todos, filters]);
 
   const value = {
     todos: filteredTodos,

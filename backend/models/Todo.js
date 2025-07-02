@@ -24,8 +24,16 @@ const todoSchema = new mongoose.Schema({
     type: Date,
     validate: {
       validator: function(value) {
-        // Allow null/undefined (optional field) or future dates
-        return !value || value > new Date();
+        // Allow null/undefined (optional field)
+        if (!value) return true;
+        
+        // Only validate future dates on new documents, not on updates
+        if (this.isNew) {
+          return value > new Date();
+        }
+        
+        // For existing documents, allow any date (don't re-validate)
+        return true;
       },
       message: 'Due date must be in the future'
     }
