@@ -9,8 +9,17 @@ const TodoItem = ({ todo, onEdit }) => {
 
   const handleToggle = async () => {
     setActionLoading('toggle');
-    await toggleTodo(todo._id);
-    setActionLoading(null);
+    try {
+      const result = await toggleTodo(todo._id);
+      if (!result.success) {
+        console.error('Failed to toggle todo:', result.error);
+        // You could add a toast notification here if you have one
+      }
+    } catch (error) {
+      console.error('Error toggling todo:', error);
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const handleDelete = async () => {

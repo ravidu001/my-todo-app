@@ -176,7 +176,10 @@ export const TodoProvider = ({ children }) => {
       return { success: true, data: updatedTodo };
     } catch (error) {
       console.error('Toggle todo error:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to toggle todo';
+      console.error('Error response:', error.response?.data);
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          'Failed to toggle todo status';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
