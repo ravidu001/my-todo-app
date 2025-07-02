@@ -117,30 +117,62 @@ todoSchema.pre('save', function(next) {
 
 // Static method to get user's todo statistics
 todoSchema.statics.getUserStats = async function(userId) {
+  const now = new Date();
+  
   const stats = await this.aggregate([
     { $match: { user: new mongoose.Types.ObjectId(userId) } },
     {
       $group: {
-        _id: '$status',
-        count: { $sum: 1 }
+        _id: null,
+        total: { $sum: 1 },
+        completed: {
+          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+        },
+        active: {
+          $sum: {
+            $cond: [
+              {
+                $and: [
+                  { $ne: ['$status', 'completed'] },
+                  {
+                    $or: [
+                      { $eq: ['$dueDate', null] },
+                      { $gte: ['$dueDate', now] }
+                    ]
+                  }
+                ]
+              },
+              1,
+              0
+            ]
+          }
+        },
+        overdue: {
+          $sum: {
+            $cond: [
+              {
+                $and: [
+                  { $ne: ['$status', 'completed'] },
+                  { $ne: ['$dueDate', null] },
+                  { $lt: ['$dueDate', now] }
+                ]
+              },
+              1,
+              0
+            ]
+          }
+        }
       }
     }
   ]);
   
-  // Format the result
-  const formattedStats = {
+  // Return formatted stats
+  return stats.length > 0 ? stats[0] : {
     total: 0,
     active: 0,
     completed: 0,
     overdue: 0
   };
-  
-  stats.forEach(stat => {
-    formattedStats[stat._id] = stat.count;
-    formattedStats.total += stat.count;
-  });
-  
-  return formattedStats;
 };
 
 // Static method to get todos by priority

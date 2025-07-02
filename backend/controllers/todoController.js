@@ -11,9 +11,24 @@ const getTodos = async (req, res) => {
     // Build query object
     const query = { user: req.user.userId };
     
-    // Filter by status
+    // Filter by status with special handling for overdue
     if (status && ['active', 'completed', 'overdue'].includes(status)) {
-      query.status = status;
+      if (status === 'overdue') {
+        // Overdue: not completed and past due date
+        query.status = { $ne: 'completed' };
+        query.dueDate = { $lt: new Date() };
+      } else if (status === 'active') {
+        // Active: not completed and either no due date or not past due
+        query.status = { $ne: 'completed' };
+        query.$or = [
+          { dueDate: { $exists: false } },
+          { dueDate: null },
+          { dueDate: { $gte: new Date() } }
+        ];
+      } else {
+        // Completed
+        query.status = status;
+      }
     }
     
     // Filter by priority
@@ -317,10 +332,6 @@ const toggleTodo = async (req, res) => {
 const getTodoStats = async (req, res) => {
   try {
     const stats = await Todo.getUserStats(req.user.userId);
-    
-    // Get overdue todos count
-    const overdueTodos = await Todo.getOverdue(req.user.userId);
-    stats.overdue = overdueTodos.length;
     
     // Get today's todos
     const today = new Date();
