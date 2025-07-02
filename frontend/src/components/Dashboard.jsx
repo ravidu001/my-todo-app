@@ -48,7 +48,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-left h-16 ml-5">
             <div className="flex items-center">
-                <img src="./public/todo-icon.webp" alt="Todo Icon" className="h-8 w-8 mr-2 inline-block" />
+                <img src="../assets/todo-icon.webp" alt="Todo Icon" className="h-8 w-8 mr-2 inline-block" />
               <h1 className="text-xl font-semibold text-secondary-900">
                 My Todo App
               </h1>
