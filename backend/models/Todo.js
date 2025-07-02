@@ -42,6 +42,10 @@ const todoSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+  completedAfterOverdue: {
+    type: Boolean,
+    default: false
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -105,11 +109,16 @@ todoSchema.pre('save', function(next) {
   // Set completedAt timestamp when marking as completed
   if (this.status === 'completed' && !this.completedAt) {
     this.completedAt = new Date();
+    // Check if completing after overdue
+    if (!this.completedAfterOverdue && this.dueDate && new Date() > this.dueDate) {
+      this.completedAfterOverdue = true;
+    }
   }
   
   // Clear completedAt when marking as active/overdue
   if (this.status !== 'completed' && this.completedAt) {
     this.completedAt = null;
+    this.completedAfterOverdue = false;
   }
   
   next();
@@ -191,8 +200,10 @@ todoSchema.statics.getOverdue = function(userId) {
 
 // Instance method to mark as completed
 todoSchema.methods.markCompleted = function() {
+  const wasOverdue = this.status === 'overdue' || (this.dueDate && new Date() > this.dueDate);
   this.status = 'completed';
   this.completedAt = new Date();
+  this.completedAfterOverdue = wasOverdue;
   return this.save();
 };
 
@@ -200,6 +211,7 @@ todoSchema.methods.markCompleted = function() {
 todoSchema.methods.markActive = function() {
   this.status = 'active';
   this.completedAt = null;
+  this.completedAfterOverdue = false;
   // Check if it should be overdue
   if (this.dueDate && new Date() > this.dueDate) {
     this.status = 'overdue';

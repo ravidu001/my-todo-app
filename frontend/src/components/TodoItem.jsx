@@ -158,6 +158,13 @@ const TodoItem = ({ todo, onEdit }) => {
                 {todo.status.charAt(0).toUpperCase() + todo.status.slice(1)}
               </span>
 
+              {/* Completed After Overdue Indicator */}
+              {todo.status === 'completed' && todo.completedAfterOverdue && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 border border-warning-200">
+                  ⚠️ Completed Late
+                </span>
+              )}
+
               {/* Tags */}
               {todo.tags && todo.tags.length > 0 && (
                 <div className="flex items-center space-x-1">
@@ -191,8 +198,10 @@ const TodoItem = ({ todo, onEdit }) => {
 
           {/* Completed timestamp */}
           {todo.completedAt && (
-            <div className="mt-2 text-xs text-secondary-500">
+            <div className={`mt-2 text-xs ${todo.completedAfterOverdue ? 'text-warning-600 font-medium' : 'text-secondary-500'}`}>
+              {todo.completedAfterOverdue ? '⚠️ ' : ''}
               Completed on {new Date(todo.completedAt).toLocaleString()}
+              {todo.completedAfterOverdue && ' (after due date)'}
             </div>
           )}
         </div>
