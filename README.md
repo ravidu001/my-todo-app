@@ -4,8 +4,8 @@ A modern, responsive todo application built with the MERN stack (MongoDB, Expres
 
 ## 🌟 Live Demo
 
-- **Frontend**: [https://your-app.vercel.app](https://your-app.vercel.app)
-- **Backend API**: [https://your-api.railway.app](https://your-api.railway.app)
+- **Frontend**: https://my-todo-app-frontend-jpcl.onrender.com
+- **Backend API**: https://my-todo-app-backend-lfou.onrender.com
 
 ## ✨ Key Features
 
